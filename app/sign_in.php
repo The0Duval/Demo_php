@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ]);
     $user = $maRequete->fetch();
     $_SESSION["user"] = $user;
-    header("location : /index.php");
+    http_response_code(302);
+    header("Location: /index.php");
     exit();
 }
 require_once "./view/sign_in.php"

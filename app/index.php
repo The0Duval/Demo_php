@@ -6,8 +6,9 @@ if(!isset($_SESSION["user"])){
     header("Location: /sign_in.php");
     exit();
 }
-$request = $pdo->prepare("SELECT * FROM `Post` INNER JOIN `User` ON `Post`.`id` = `User`.`id`");
-$request->execute();
+
+$request = $pdo->query("SELECT * FROM `Post`");
+
 $post = $request->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -18,10 +19,12 @@ $post = $request->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style/style.css">
     <title>Document</title>
 </head>
 <body>
+    <form action="sign_out.php" method="POST">
+        <button type="submit">Déconnexion</button>
+    </form>
     <h3>Bienvenue sur le blog d'Hétic</h3>
     <p>création d'un nouveau post</p>
     <form method="post" enctype="multipart/form-data" action="post.php">
@@ -33,13 +36,17 @@ $post = $request->fetchAll(PDO::FETCH_ASSOC);
         </br>
         <button type="submit" id="submitPublication" >Envoyer</button>
     </form>
-    <?php foreach($post as $post):?>
-        <div>
-            <p><?= $post['first_name']?></p>
-            <p><?= $post['postTitle']?></p>
-            <p><?= $post['text']?></p>
-            <p><?= $post['date']?></p>
-        </div>
-    <?php endforeach; ?>
+    <?php if($post):
+        foreach($post as $post):?>
+            <div>
+                <p><?= $post['first_name']?></p>
+                <p><?= $post['postTitle']?></p>
+                <p><?= $post['text']?></p>
+                <p><?= $post['date']?></p>
+            </div>
+        <?php endforeach;
+    else:
+        echo "Pas d'articles";
+    endif; ?>
 </body>
 </html>

@@ -1,14 +1,11 @@
 <?php
-require_once "./pdo.php";
-$message ="";
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $prenom = $_POST['first_name'];
     $nom = $_POST["last_name"];
     $email = $_POST["email"];
     $mdp = hash("sha512", $_POST["password"]);
     $confirmMdp = hash("sha512", $_POST["confirmPassword"]);
-     
+    require_once "./pdo.php";
     $maRequete = $pdo->prepare("SELECT `email` FROM `User` WHERE `email` = :email;");
     $maRequete->execute([
         ":email"=> $email
@@ -24,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ":email" => $email,
             ":mdp" => $mdp
         ]);
-    }else{
-        $message = "Les mots de passe ne correspondent pas";
-        require_once "./view/sign_up.php";
+        http_response_code(302);
+        header("Location: /sign_in.php");
+        exit();
     }
 }
 
