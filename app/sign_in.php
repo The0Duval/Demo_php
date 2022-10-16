@@ -10,10 +10,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ":email" => $email,
     ]);
     $user = $maRequete->fetch();
+    if(!$user || $user["password"] !== $password){
+        echo"utilisateur introuvable";
+    } else { 
     $_SESSION["user"] = $user;
     http_response_code(302);
     header("Location: /index.php");
     exit();
+    }
 }
 require_once "./view/sign_in.php"
 ?>
